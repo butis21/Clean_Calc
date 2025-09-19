@@ -1,0 +1,43 @@
+/* styles.css — минимальная стилизация, responsive */
+:root{
+  --bg:#f7f9fb;
+  --card:#ffffff;
+  --accent:#0f62fe;
+  --muted:#6b7280;
+  --danger:#ef4444;
+  --radius:10px;
+  --pad:14px;
+  font-family: Inter, Roboto, system-ui, -apple-system, "Segoe UI", "Helvetica Neue", Arial;
+}
+
+*{box-sizing:border-box}
+html,body{height:100%;margin:0;background:var(--bg);color:#111}
+header{padding:20px; text-align:center}
+h1{margin:.2rem 0}
+main{max-width:1000px;margin:0 auto;padding:16px}
+.form-section, .table-section{background:var(--card);border-radius:var(--radius);padding:var(--pad);box-shadow:0 6px 18px rgba(12,18,31,0.06);margin-bottom:16px}
+.row{display:flex;gap:12px;flex-wrap:wrap;align-items:flex-end}
+.row label{display:flex;flex-direction:column;font-size:13px;color:var(--muted);min-width:140px}
+.row.small-gap{margin-top:8px}
+input[type=number], select{padding:8px;border-radius:8px;border:1px solid #e6e9ef;background:#fff}
+.primary{background:var(--accent);color:white;border:0;padding:10px 14px;border-radius:8px;cursor:pointer}
+.ghost{background:transparent;border:1px solid #d1d5db;padding:8px 12px;border-radius:8px;cursor:pointer}
+.secondary{background:transparent;border:1px solid #e6eefc;padding:8px 10px;border-radius:8px;cursor:pointer}
+.danger{background:var(--danger);color:white;border:0;padding:8px 12px;border-radius:8px;cursor:pointer}
+
+table{width:100%;border-collapse:collapse;margin-top:12px}
+th,td{padding:8px;text-align:left;border-bottom:1px solid #f1f5f9;font-size:13px}
+th{color:var(--muted);font-weight:600}
+tbody tr:hover{background:#fbfdff}
+
+.controls{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px}
+.summary{display:flex;justify-content:flex-end;padding-top:8px;font-weight:700;font-size:18px;color:#0b1221}
+
+footer{text-align:center;color:var(--muted);font-size:13px;padding:8px}
+
+/* Responsive */
+@media (max-width:720px){
+  .row label{min-width:120px;flex:1}
+  .summary{font-size:16px}
+  th,td{font-size:12px}
+}

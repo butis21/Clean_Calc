@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Mini-сметчик клининга</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header>
+    <h1>Mini‑сметчик клининга</h1>
+    <p>Быстро посчитать стоимость мойки окон/дверей. Готовое решение — скачал, запустил и работает.</p>
+  </header>
+
+  <main>
+    <section class="form-section">
+      <div class="row">
+        <label>Тип объекта
+          <select id="itemType">
+            <option>Окно</option>
+            <option>Дверь</option>
+            <option>Другое</option>
+          </select>
+        </label>
+
+        <label>Ширина (см)
+          <input id="width" type="number" min="0" step="0.1" placeholder="например 90">
+        </label>
+
+        <label>Высота (см)
+          <input id="height" type="number" min="0" step="0.1" placeholder="например 200">
+        </label>
+
+        <label>Кол-во
+          <input id="quantity" type="number" min="1" step="1" value="1">
+        </label>
+      </div>
+
+      <div class="row small-gap">
+        <label>Режим ценообразования
+          <select id="priceMode">
+            <option value="sqm">Цена за м²</option>
+            <option value="fixed">Фикс. цена за объект</option>
+          </select>
+        </label>
+
+        <label id="priceLabel">Цена (руб)
+          <input id="price" type="number" min="0" step="0.01" placeholder="например 600">
+        </label>
+
+        <button id="addBtn" class="primary">Добавить в смету</button>
+        <button id="clearForm" class="ghost">Очистить поля</button>
+      </div>
+    </section>
+
+    <section class="table-section">
+      <h2>Список позиций</h2>
+      <div class="controls">
+        <button id="exportCsv" class="secondary">Экспорт CSV</button>
+        <button id="printBtn" class="secondary">Печать</button>
+        <button id="resetAll" class="danger">Очистить всё</button>
+      </div>
+
+      <table id="itemsTable">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Тип</th>
+            <th>Ширина (см)</th>
+            <th>Высота (см)</th>
+            <th>Площадь (м²)</th>
+            <th>Кол-во</th>
+            <th>Режим</th>
+            <th>Цена (руб)</th>
+            <th>Стоимость (руб)</th>
+            <th>Действие</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+
+      <div class="summary">
+        <div>Итого: <span id="totalAmount">0.00</span> руб</div>
+      </div>
+    </section>
+
+    <footer>
+      <small>Версия 1.0 — работает офлайн, без серверов. Можно открыть index.html в браузере.</small>
+    </footer>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
