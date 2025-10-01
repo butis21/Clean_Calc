@@ -127,23 +127,46 @@
     }
   });
 
-  exportCsv.addEventListener('click', ()=>{
-    if(items.length === 0){ alert('Нет позиций для экспорта'); return; }
-    const rows = [
-      ['№','Тип','Ширина (см)','Высота (см)','Площадь (м²)','Кол-во','Режим','Цена (руб)','Стоимость (руб)']
-    ];
+  exportCsv.addEventListener('click', () => {
+    if (items.length === 0) {
+        alert('Нет позиций для экспорта');
+        return;
+    }
+
+    const rows = [['№', 'Тип', 'Ширина (см)', 'Высота (см)', 'Площадь (м²)', 'Кол-во', 'Режим', 'Цена (руб)', 'Стоимость (руб)']];
     let idx = 1;
-    items.forEach(it=>{
-      const area = areaMeters(it.width, it.height);
-      const cost = it.mode === 'sqm' ? area * it.price * it.qty : it.price * it.qty;
-      rows.push([idx, it.type, it.width, it.height, area.toFixed(3), it.qty, it.mode === 'sqm' ? 'за м²' : 'фикс', Number(it.price).toFixed(2), Number(cost).toFixed(2)]);
-      idx++;
+    items.forEach(it => {
+        const area = areaMeters(it.width, it.height);
+        const cost = it.mode === 'sqm' ? area * it.price * it.qty : it.price * it.qty;
+        rows.push([
+            idx,
+            it.type,
+            it.width,
+            it.height,
+            area.toFixed(3),
+            it.qty,
+            it.mode === 'sqm' ? 'за м²' : 'фикс',
+            Number(it.price).toFixed(2),
+            Number(cost).toFixed(2)
+        ]);
+        idx++;
     });
     rows.push([]);
     rows.push(['Итого', '', '', '', '', '', '', '', totalAmount.textContent]);
 
-    const csv = rows.map(r => r.map(cell => `"${String(cell).replace(/"/g,'""')}"`).join(',')).join('\n');
-    const blob = new Blob([csv], {type:'text/csv;charset=utf-8;'});
+    // Создаем строку CSV
+    const csv = rows.map(row =>
+        row.map(cell => `"${String(cell).replace(/"/g, '""')}"`).join(',')
+    ).join('\n');
+    
+    // Используем специальный Unicode-знак (UTF-8 BOM) для явного указания кодировки
+    const utf8bom = '\ufeff'; // маркер UTF-8 BOM
+    const finalCSV = utf8bom + csv;
+
+    // Создание объекта Blob с правильной кодировкой
+    const blob = new Blob([finalCSV], { type: 'text/csv;charset=utf-8;' });
+
+    // Формирование ссылки для скачивания
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
