@@ -185,9 +185,6 @@
     if(confirm('Очистить все позиции?')){ items = []; render(); }
   });
 
-  // initialize sample data to demonstrate (can be removed)
-  items.push({type:'Дверь', width:90, height:200, qty:4, price:600, mode:'fixed'});
-  items.push({type:'Окно', width:120, height:150, qty:6, price:300, mode:'sqm'});
   render();
 
 })();
