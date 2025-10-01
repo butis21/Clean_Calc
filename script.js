@@ -133,48 +133,44 @@
         return;
     }
 
-    const rows = [['№', 'Тип', 'Ширина (см)', 'Высота (см)', 'Площадь (м²)', 'Кол-во', 'Режим', 'Цена (руб)', 'Стоимость (руб)']];
+    // Готовим заголовки столбцов
+    const headers = ['№', 'Тип', 'Ширина (см)', 'Высота (см)', 'Площадь (м²)', 'Кол-во', 'Режим', 'Цена (руб)', 'Стоимость (руб)'];
+
+    // Подготовленные данные
+    const data = [headers]; // Начинаем с массива заголовков
+
     let idx = 1;
-    items.forEach(it => {
-        const area = areaMeters(it.width, it.height);
-        const cost = it.mode === 'sqm' ? area * it.price * it.qty : it.price * it.qty;
-        rows.push([
+    items.forEach(item => {
+        const area = areaMeters(item.width, item.height); // Получаем площадь
+        const cost = item.mode === 'sqm'
+                     ? area * item.price * item.qty
+                     : item.price * item.qty; // Рассчитываем стоимость
+        
+        data.push([
             idx,
-            it.type,
-            it.width,
-            it.height,
+            item.type,
+            item.width,
+            item.height,
             area.toFixed(3),
-            it.qty,
-            it.mode === 'sqm' ? 'за м²' : 'фикс',
-            Number(it.price).toFixed(2),
+            item.qty,
+            item.mode === 'sqm' ? 'за м²' : 'фикс',
+            Number(item.price).toFixed(2),
             Number(cost).toFixed(2)
         ]);
         idx++;
     });
-    rows.push([]);
-    rows.push(['Итого', '', '', '', '', '', '', '', totalAmount.textContent]);
 
-    // Создаем строку CSV
-    const csv = rows.map(row =>
-        row.map(cell => `"${String(cell).replace(/"/g, '""')}"`).join(',')
-    ).join('\n');
-    
-    // Используем специальный Unicode-знак (UTF-8 BOM) для явного указания кодировки
-    const utf8bom = '\ufeff'; // маркер UTF-8 BOM
-    const finalCSV = utf8bom + csv;
+    // Добавляем итоговую строку
+    data.push(['Итого', '', '', '', '', '', '', '', totalAmount.textContent]);
 
-    // Создание объекта Blob с правильной кодировкой
-    const blob = new Blob([finalCSV], { type: 'text/csv;charset=utf-8;' });
+    // Генерируем рабочий лист Excel
+    const ws = XLSX.utils.aoa_to_sheet(data);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Смета');
 
-    // Формирование ссылки для скачивания
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = 'estimate.csv';
-    document.body.appendChild(a);
-    a.click();
-    a.remove();
-    URL.revokeObjectURL(url);
+    // Запись в файл и сохранение на компьютере
+    const fileName = 'Расчет.xlsx';
+    XLSX.writeFile(wb, fileName);
   });
 
   printBtn.addEventListener('click', ()=>{
